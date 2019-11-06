@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef, useReducer, useEffect, useState } from "react"
 import FeedPost from "app/FeedPost"
 import { loadFeedPosts, subscribeToNewFeedPosts } from "app/utils"
 // import FeedFinal from './Feed.final'
@@ -6,6 +6,27 @@ import { loadFeedPosts, subscribeToNewFeedPosts } from "app/utils"
 export default Feed
 
 function Feed() {
+  //need state 
+  // const [posts, setPosts ] = useState([fakePost])
+  const [posts, setPosts ] = useState([])
+
+
+  // didmount/first render
+  // update
+  // unmount 
+  // what state do i synchronize this eff with?
+  // useEffect(effect) //all state
+  // useEffect(effect,[]) //no state
+
+
+  useEffect(()=> {
+    loadFeedPosts(Date.now(), 3).then(posts => {
+      //whenever network makes a request, always:
+      // clap clap
+      setPosts(posts)
+    })
+  }, [])
+  // always think of the dependency array
   return (
     <div className="Feed">
       <div className="Feed_button_wrapper">
@@ -14,7 +35,11 @@ function Feed() {
         </button>
       </div>
 
-      <FeedPost post={fakePost} />
+      {/* <FeedPost post={fakePost} /> */}
+      {posts.map(post => (
+        <FeedPost key={post.id} post={post} />
+      ))}
+
 
       <div className="Feed_button_wrapper">
         <button className="Feed_new_posts_button icon_button">View More</button>

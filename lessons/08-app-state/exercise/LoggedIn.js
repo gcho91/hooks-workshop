@@ -10,7 +10,19 @@ import User from "app/User"
 import NotFound from "app/NotFound"
 
 export default function LoggedIn() {
-  const user = null
+  // const user = null
+  const [{ user, auth }, dispatch] = useAppState()
+
+  useEffect(() => {
+    // runs @componentDidMount, componentDidUpdate, componentWillUnmount 
+    // updates every time! put logic insude useEffect so it updates correctly
+    if (!user) {
+      fetchUser(auth.uid).then(user => {
+        console.log(user)
+        dispatch({ type: "LOAD_USER", user })
+      })
+    }
+  }, [user, auth.uid, dispatch])
 
   return user ? (
     <Fragment>
